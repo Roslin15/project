@@ -1,0 +1,35 @@
+language: ruby
+sudo: required
+dist: trusty
+group: bluezone
+
+before_script:
+  # fail fast unless we are debugging
+  - if [ "$DEBUG" != "true" ];
+      then set -o errexit;
+    fi
+  # fetch the build tools
+  - if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ "$TRAVIS_BRANCH" = "publish" ]] ;
+      then git clone --depth=1 -b master git@github.ibm.com:OpenContent/pattern-build.git;
+      else git clone --depth=1 -b development git@github.ibm.com:OpenContent/pattern-build.git;
+    fi
+  - cp -r pattern-build/* .
+  - cp -r pattern-build/.rubocop.yml .
+  - ./tasks/before_script.sh
+  # load Chef paths for Ruby&gems
+  - eval "$(/opt/chefdk/bin/chef shell-init bash)"
+
+script:
+  # - rake templates --trace
+  - rake template_modules
+  - rake validate_file_struct:templates
+after_success:
+  - if [[ "$TRAVIS_PULL_REQUEST" = "false" ]] && [[ ( "$TRAVIS_BRANCH" = "development" )  || ( "$TRAVIS_BRANCH" = "test" ) || ( "$TRAVIS_BRANCH" = "publish" && "$TRAVIS_TAG" = "publish" ) ]];
+     then ./tasks/camhub_publish.sh;
+    fi
+
+notifications:
+  slack:
+    on_failure: always
+    rooms:
+      - ibm-cloudplatform:Cinmla1MteI136VZXYq6JXLW
