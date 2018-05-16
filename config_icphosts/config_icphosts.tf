@@ -19,7 +19,8 @@ resource "local_file" "generate_icp_hosts_file" {
 resource "null_resource" "generate_icp_hosts_file" {
   depends_on = ["local_file.generate_icp_hosts_file"]
   provisioner "local-exec" {
-    command = "bash -c '/tmp/${var.random}/generate_icp_hosts.sh -r ${var.random} -m ${var.master_public_ips} -b ${var.boot_public_ips} -p ${var.proxy_public_ips} -w ${var.worker_public_ips} -v ${var.va_public_ips}'"
+   command = "bash -c '/tmp/${var.random}/generate_icp_hosts.sh -r ${var.random} -m ${var.master_public_ips} -n ${var.management_public_ips} -p ${var.proxy_public_ips} -w ${var.worker_public_ips} -v ${var.va_public_ips}'"
+#  command = "bash -c '/tmp/${var.random}/generate_icp_hosts.sh -r ${var.random} -m ${var.master_public_ips} -b ${var.boot_public_ips} -p ${var.proxy_public_ips} -w ${var.worker_public_ips} -v ${var.va_public_ips}'"
   }
 }
 

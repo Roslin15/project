@@ -6,7 +6,7 @@ resource "null_resource" "create_nfs_server_dependsOn" {
 }
 
 resource "null_resource" "create_nfs_server" {
-  count = "${length(var.vm_ipv4_address_list)}"
+  count = "${var.enable_nfs == "true" ? length(var.vm_ipv4_address_list) : 0}"
   depends_on = ["null_resource.create_nfs_server_dependsOn"]
   connection {
     type = "ssh"
@@ -31,7 +31,7 @@ resource "null_resource" "create_nfs_server" {
 }
 
 resource "null_resource" "nfs_server_create" {
-  depends_on = ["null_resource.create_nfs_server"]
+  depends_on = ["null_resource.create_nfs_server","null_resource.create_nfs_server_dependsOn"]
   provisioner "local-exec" {
     command = "echo 'NFS server created'" 
   }

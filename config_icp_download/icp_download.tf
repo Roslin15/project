@@ -51,9 +51,10 @@ resource "null_resource" "install_docker" {
 }
 
 resource "null_resource" "load_icp_images" {
-  depends_on = ["null_resource.mkdir-boot-node"]
+  depends_on = ["null_resource.mkdir-boot-node","null_resource.install_docker"]
 
-  count = "${length(var.vm_ipv4_address_list)}"
+  count = "${var.enable_bluemix_install == "false" ? length(var.vm_ipv4_address_list) : 0}"
+#  count = "${length(var.vm_ipv4_address_list)}"
   connection {
     type = "ssh"
     user = "${var.vm_os_user}"
@@ -81,7 +82,7 @@ resource "null_resource" "load_icp_images" {
 }
 
 resource "null_resource" "docker_install_finished" {
-  depends_on = ["null_resource.load_icp_images"]
+  depends_on = ["null_resource.load_icp_images","null_resource.config_icp_download_dependsOn","null_resource.install_docker","null_resource.mkdir-boot-node"]
   provisioner "local-exec" {
     command = "echo 'Docker and ICP Images loaded, has been installed on Nodes'"
   }

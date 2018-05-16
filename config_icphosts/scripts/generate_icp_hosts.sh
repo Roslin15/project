@@ -5,22 +5,22 @@ set -e
 
 while test $# -gt 0; do
 	[[ $1 =~ ^-r|--random$ ]] && { random="$2"; shift 2; continue; };
-	[[ $1 =~ ^-b|--boot$ ]] && { bootip="$2"; shift 2; continue; };
   [[ $1 =~ ^-m|--master$ ]] && { masterip="$2"; shift 2; continue; };
+  [[ $1 =~ ^-n|--management$ ]] && { managementip="$2"; shift 2; continue; };
   [[ $1 =~ ^-p|--proxy$ ]] && { proxyip="$2"; shift 2; continue; };
   [[ $1 =~ ^-w|--worker$ ]] && { workerip="$2"; shift 2; continue; };
   [[ $1 =~ ^-v|--va$ ]] && { vaip="$2"; shift 2; continue; };
 	shift
 done
 
-IFS=',' read -a mybootarray <<< "${bootip}"
 IFS=',' read -a mymasterarray <<< "${masterip}"
+IFS=',' read -a mymanagementarray <<< "${managementip}"
 IFS=',' read -a myproxyarray <<< "${proxyip}"
 IFS=',' read -a myworkerarray <<< "${workerip}"
 IFS=',' read -a myvaarray <<< "${vaip}"
 
-export NUM_BOOT=${#mybootarray[@]}
 export NUM_MASTER=${#mymasterarray[@]}
+export NUM_MANAGEMENT=${#mymanagementarray[@]}
 export NUM_PROXY=${#myproxyarray[@]}
 export NUM_WORKER=${#myworkerarray[@]}
 export NUM_VA=${#myvaarray[@]}
@@ -33,8 +33,8 @@ KUB_CMDS="kubelet_extra_args='[\"--eviction-hard=memory.available<100Mi,nodefs.a
 
 icp_hosts_txt=$(
   echo '[management]'
-  for ((i=0; i < ${NUM_BOOT}; i++)); do
-    echo "${mybootarray[i]} ${KUB_CMDS}"
+  for ((i=0; i < ${NUM_MANAGEMENT}; i++)); do
+    echo "${mymanagementarray[i]} ${KUB_CMDS}"
   done
   echo "[master]"
   for ((i=0; i < ${NUM_MASTER}; i++)); do
