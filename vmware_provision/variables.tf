@@ -22,6 +22,10 @@ data "vsphere_virtual_machine" "vm_template" {
   name = "${var.vm_template}"
   datacenter_id = "${data.vsphere_datacenter.vsphere_datacenter.id}"
 }
+variable "enable_vm" {
+  type = "string"
+  default = "true"
+}
 
 #Variable : vm_-name
 variable "vm_name" {

@@ -9,4 +9,5 @@ variable "icp_url"              { type = "string"  description = "IBM Cloud Priv
 variable "icp_version"          { type = "string"  description = "Version of ICP to be Installed"}
 variable "download_user"        { type = "string"  description = "Repository User Name (Optional)" }    
 variable "download_user_password"  { type = "string" description = "Repository User Password (Optional)"}  
+variable "enable_bluemix_install" { type="string" default = "false" description = "Enable install from bluemix repository"}
     
