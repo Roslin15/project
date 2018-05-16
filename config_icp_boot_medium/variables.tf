@@ -11,7 +11,8 @@ variable "bluemix_token"   		{ type="string" description = "Bluemix token"}
 variable "enable_metering"      { type="string" description = "Enable IBM Cloud Private Metering"}
 variable "icp_version"          { type="string" description = "IBM Cloud Private Version"}
 variable "kub_version"          { type="string" description = "Kubernetes Version"}
+variable "icp_cluster_name"     { type="string" description = "IBM Cloud Private Cluster Name"}
 variable "vm_domain"            { type="string" description = "IBM Cloud Private Domain Name"}
-variable "icp_admin_user"       { type = "string" default = "admin"}
+variable "icp_admin_user"       { type="string" description = "IBM Cloud Private Admin Username"}
 variable "icp_admin_password"   { type="string" description = "IBM Cloud Private Admin Password"}
 variable "gluster_volumetype" 	{ type="string" description = "Gluster durability" default = "volumetype: none" }
