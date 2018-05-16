@@ -37,8 +37,6 @@ resource "null_resource" "setup_installer" {
   provisioner "remote-exec" {
     inline = [
       "echo \"version: ${var.icp_version}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-      "cat /root/glusterfs.txt >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-      "echo \"      ${var.gluster_volumetype}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"kibana_install: ${var.enable_kibana}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"metering_enabled: ${var.enable_metering}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "sed -i 's/# cluster_name.*/cluster_name: ${var.icp_cluster_name}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
@@ -52,6 +50,9 @@ resource "null_resource" "setup_installer" {
       "sudo docker login -u token -p ${var.bluemix_token} registry.ng.bluemix.net",
       "sudo docker run --net=host -t -e LICENSE=accept  -v $(pwd):/installer/cluster registry.ng.bluemix.net/mdelder/icp-inception:${var.icp_version} install | tee /tmp/installlog",
     ]
+
+    # "cat /root/glusterfs.txt >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
+    # "echo \"      ${var.gluster_volumetype}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
   }
 }
 
@@ -77,8 +78,6 @@ resource "null_resource" "setup_installer_tar" {
   provisioner "remote-exec" {
     inline = [
       "echo \"version: ${var.icp_version}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-      "echo \"      ${var.gluster_volumetype}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-      "cat /root/glusterfs.txt >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"kibana_install: ${var.enable_kibana}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"metering_enabled: ${var.enable_metering}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "sed -i 's/default_admin_user.*/default_admin_user: ${var.icp_admin_user}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
@@ -88,6 +87,9 @@ resource "null_resource" "setup_installer_tar" {
       "sudo docker run --net=host -t -e LICENSE=accept  -v $(pwd):/installer/cluster ibmcom/icp-inception:${var.icp_version}-ee install | sudo tee -a /root/cfc-install.log",
       "docker run -e LICENSE=accept --net=host --rm -v /usr/local/bin:/data ibmcom/hyperkube:v${var.kub_version}-ee cp /kubectl /data",
     ]
+
+    # "echo \"      ${var.gluster_volumetype}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
+    # "cat /root/glusterfs.txt >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
   }
 }
 
