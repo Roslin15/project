@@ -1,1 +1,5 @@
-output "dependsOn" { value = "${null_resource.icp_install_HA_finished.id}" description="Output Parameter when Module Complete"}
+output "dependsOn" {
+  value = "${null_resource.icp_install_finished.id}"
+
+  description = "Output Parameter when Module Complete"
+}
