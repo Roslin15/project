@@ -42,10 +42,7 @@ resource "null_resource" "setup_installer" {
       "echo \"      ${var.gluster_volumetype}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"kibana_install: ${var.enable_kibana}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"metering_enabled: ${var.enable_metering}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-
-      #"echo \"cluster_access_ip: ${var.cluster_access_ip}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "sed -i 's/# cluster_vip.*/cluster_vip: ${var.cluster_vip}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-
       "sed -i 's/# vip_iface.*/vip_iface: ${var.cluster_vip_iface}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "sed -i 's/# proxy_vip_iface.*/proxy_vip_iface: ${var.proxy_vip_iface}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "sed -i 's/# proxy_vip.*/proxy_vip: ${var.proxy_vip}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
@@ -89,10 +86,7 @@ resource "null_resource" "setup_installer_tar" {
       "cat /root/glusterfs.txt >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"kibana_install: ${var.enable_kibana}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "echo \"metering_enabled: ${var.enable_metering}\" >> /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-
-      # "echo \"cluster_access_ip: ${var.cluster_access_ip}\" >> /root/${var.icp_version}/cluster/config.yaml",
       "sed -i 's/default_admin_user.*/default_admin_user: ${var.icp_admin_user}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
-
       "sed -i 's/default_admin_password.*/default_admin_password: ${var.icp_admin_password}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
       "cp /root/.ssh/id_rsa /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/ssh_key",
       "sed -i 's/# cluster_vip.*/cluster_vip: ${var.cluster_vip}/g' /root/ibm-cloud-private-x86_64-${var.icp_version}/cluster/config.yaml",
