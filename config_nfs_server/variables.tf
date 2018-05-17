@@ -21,3 +21,8 @@ variable "nfs_drive" {
   default = "/dev/sdb"
   description = "Drive that should be formatted and used as NFS"
 }
+variable "enable_nfs" { 
+  type = "string" 
+  default = "true"
+  description = "If true, create NFS server VM and mounts worker nodes to server."
+}
