@@ -27,13 +27,13 @@ export NUM_WORKER=${#myworkerarray[@]}
 export NUM_VA=${#myvaarray[@]}
 
 echo "$NUM_MASTER"
-
+echo "$NUM_MANAGEMENT"
 # Create Endpoint Based on Gluster Cluster IPs
 
 KUB_CMDS="kubelet_extra_args='[\"--eviction-hard=memory.available<100Mi,nodefs.available<2Gi,nodefs.inodesFree<5\"]',\"--image-gc-high-threshold=100\",\"--image-gc-low-threshold=100\""
 
 icp_hosts_txt=$(
-  if [ ${NUM_MANAGEMENT} -gt 1 ]
+  if [ ${NUM_MANAGEMENT} -gt 0 ]
   then
     echo '[management]'
     for ((i=0; i < ${NUM_MANAGEMENT}; i++)); do
@@ -52,11 +52,11 @@ icp_hosts_txt=$(
   for ((i=0; i < ${NUM_WORKER}; i++)); do
     echo "${myworkerarray[i]}"
   done
-  if [ ${NUM_VA} -gt 1 ]
+  if [ ${NUM_VA} -gt 0 ]
   then
     echo '[va]'
     for ((i=0; i < ${NUM_VA}; i++)); do
-      echo "${myvaarray[i]} 
+      echo "${myvaarray[i]}" 
     done
   fi
 )
