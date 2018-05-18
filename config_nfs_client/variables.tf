@@ -19,7 +19,7 @@ variable "vm_os_private_key" {
 }
 
 variable "nfs_server" {
-  type = "list"
+  type = "string"
   description = "Address of the NFS server"
 }
 variable "nfs_folder" {
