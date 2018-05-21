@@ -1,6 +1,6 @@
 resource "vsphere_virtual_machine" "vm" {
   // count = "${var.count}"
-  count = "${var.vm_disk2_enable == "true" && var.enable_vm == "true" ? 0 : length(var.vm_ipv4_address)}"
+  count = "${var.vm_disk2_enable == "false" && var.enable_vm == "true" ? length(var.vm_ipv4_address) : 0}"
 
   name             = "${format("${lower(var.vm_name)}%01d", count.index + 1) }"
   folder           = "${var.vm_folder}"

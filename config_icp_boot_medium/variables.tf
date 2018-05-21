@@ -96,10 +96,3 @@ variable "icp_admin_password" {
   description = "IBM Cloud Private Admin Password"
 }
 
-variable "gluster_volumetype" {
-  type = "string"
-
-  description = "Gluster durability"
-
-  default = "volumetype: none"
-}

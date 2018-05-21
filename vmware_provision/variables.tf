@@ -101,6 +101,7 @@ variable "vm_ipv4_gateway" {
 }
 
 variable "vm_ipv4_address" {
+  default = []
   description = "IPv4 address for vNIC configuration"
   type = "list"
 }

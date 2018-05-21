@@ -7,3 +7,4 @@ variable "vm_os_password"       { type = "string" description = "Operating Syste
 variable "vm_os_user"           { type = "string" description = "Operating System user for the Operating System User to access virtual machine"}
 variable "private_key"          { type = "string" description ="Private SSH key Details to the Virtual machine"}
 variable "boot_vm_ipv4_address" { type = "string" description ="IPv4 Addressof the Management Node"}
+variable "gluster_volumetype_none"   { type = "string" default = "false"}
