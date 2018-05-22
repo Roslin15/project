@@ -1,12 +1,13 @@
 # Create ICp config.yaml glusterfs update file
 resource "null_resource" "config_glusterfs_dependsOn" {
   provisioner "local-exec" {
-	  command = "echo echo The dependsOn output for glusterFS is ${var.dependsOn}"
+	  command = "echo The dependsOn output for glusterFS is ${var.dependsOn}"
   }
 }
 
 data "local_file" "example" {
   depends_on = ["null_resource.config_glusterfs_dependsOn"]
+  count       = "${var.enable_glusterFS == "true" ? 1 : 0}"
   filename = "${path.module}/scripts/generate_glusterfs_txt.sh"
 }
 
@@ -24,12 +25,18 @@ resource "null_resource" "generate_glusterfs_txt" {
     command = "bash -c '/tmp/${var.random}/generate_glusterfs_txt.sh ${var.random} ${var.vm_ipv4_address_str}'"
   }
 }
-
-
-resource "null_resource" "load_device_script" {
+resource "null_resource" "add_volumetype_none" {
   depends_on = ["null_resource.generate_glusterfs_txt"]
+  count       = "${var.enable_glusterFS == "true" && var.gluster_volumetype_none == "true" ? 1 : 0}"
+  provisioner "local-exec" {
+    command  =  "${format("echo '      volumetype: none' >> /tmp/${var.random}/glusterfs.txt")}"
+  }
+}
+resource "null_resource" "load_device_script" {
+  depends_on = ["null_resource.add_volumetype_none"]
+  count       = "${var.enable_glusterFS == "true" ? length(var.vm_ipv4_address_list) : 0}"
 
-  count = "${length(var.vm_ipv4_address_list)}"
+#  count = "${length(var.vm_ipv4_address_list)}"
   connection {
     type = "ssh"
     user = "${var.vm_os_user}"
@@ -64,9 +71,10 @@ resource "null_resource" "load_device_script" {
 }
 
 resource "null_resource" "load_gluster_prereqs" {
-  depends_on = ["null_resource.generate_glusterfs_txt"]
+  depends_on = ["null_resource.generate_glusterfs_txt","null_resource.load_device_script","null_resource.add_volumetype_none"]
+  count       = "${var.enable_glusterFS == "true" ? length(var.vm_ipv4_address_list) : 0}"
 
-  count = "${length(var.vm_ipv4_address_list)}"
+#  count = "${length(var.vm_ipv4_address_list)}"
   connection {
     type = "ssh"
     user = "${var.vm_os_user}"
@@ -90,11 +98,12 @@ resource "null_resource" "load_gluster_prereqs" {
 }
 
 resource "null_resource" "post_populate_glusterfs_end" {
-  depends_on = ["null_resource.load_gluster_prereqs"]
+  depends_on = ["null_resource.add_volumetype_none","null_resource.load_gluster_prereqs","null_resource.config_glusterfs_dependsOn","null_resource.load_device_script","local_file.generate_glusterfs_txt","null_resource.generate_glusterfs_txt"]
   provisioner "local-exec" {
     command =         "${format("echo 'the end of gluster FS' ")}"
   }
 }
+
 
 
 
