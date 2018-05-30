@@ -2,7 +2,7 @@ resource "vsphere_virtual_machine" "vm" {
   // count = "${var.count}"
   count = "${var.vm_disk2_enable == "false" && var.enable_vm == "true" ? length(var.vm_ipv4_address) : 0}"
 
-  name             = "${format("${lower(var.vm_name)}%01d", count.index + 1) }"
+  name             = "${lower(var.vm_name)}"
   folder           = "${var.vm_folder}"
   num_cpus         = "${var.vm_vcpu}"
   memory           = "${var.vm_memory}"
@@ -17,7 +17,7 @@ resource "vsphere_virtual_machine" "vm" {
     customize {
       linux_options {
         domain    = "${var.vm_domain}"
-        host_name = "${format("${lower(var.vm_name)}%01d", count.index + 1) }"
+        host_name = "${lower(var.vm_name)}"
       }
 
       network_interface {
@@ -144,7 +144,7 @@ resource "vsphere_virtual_machine" "vm2disk" {
   // count = "${var.count}"
   count = "${var.vm_disk2_enable == "true" && var.enable_vm == "true" ? length(var.vm_ipv4_address) : 0}"
 
-  name             = "${format("${lower(var.vm_name)}%01d", count.index + 1) }"
+  name             = "${lower(var.vm_name)}"
   folder           = "${var.vm_folder}"
   num_cpus         = "${var.vm_vcpu}"
   memory           = "${var.vm_memory}"
@@ -159,7 +159,7 @@ resource "vsphere_virtual_machine" "vm2disk" {
     customize {
       linux_options {
         domain    = "${var.vm_domain}"
-        host_name = "${format("${lower(var.vm_name)}%01d", count.index + 1) }"
+        host_name = "${lower(var.vm_name)}"
       }
 
       network_interface {
