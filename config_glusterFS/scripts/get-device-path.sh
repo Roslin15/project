@@ -19,11 +19,11 @@ function find_disk()
 {
   # Will return an unallocated disk, it will take a sorting order from largest to smallest, allowing a the caller to indicate which disk
   [[ -z "$1" ]] && whichdisk=1 || whichdisk=$1
-  local readonly=`parted -l | egrep -i "Warning:" | tr ' ' '\n' | egrep "/dev/" | sort -u | xargs -i echo "{}|" | xargs echo "NONE|" | tr -d ' ' | rev | cut -c2- | rev`
+  local readonly=`parted -l 2>&1 | egrep -i "Warning:" | tr ' ' '\n' | egrep "/dev/" | sort -u | xargs -i echo "{}|" | xargs echo "NONE|" | tr -d ' ' | rev | cut -c2- | rev`
   # diskcount=`sudo parted -l 2>&1 | egrep -v "$readonly" | egrep -c -i 'ERROR: '`
   local formatted=$(formattedalready `sudo parted -l 2>&1 | egrep -i error | egrep -v "dev.mapper" | cut -f2 -d:`)
   diskcount=`sudo parted -l 2>&1 | egrep -v "$readonly|$formatted|/dev/mapper/" | egrep -c -i 'ERROR: '`
-  
+
   if [ "$diskcount" -lt "$whichdisk" ] ; then
         echo ""
   else
