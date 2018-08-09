@@ -71,7 +71,7 @@ resource "null_resource" "load_device_script" {
       "sed -i 's/@@host@@/${var.vm_ipv4_address_list[count.index]}/g' /tmp/get-device-path.properties",
       "/tmp/get-device-path.sh part1 /tmp/get-device-path.properties",
       "/tmp/get-device-path.sh part2 /tmp/get-device-path.properties",
-      "scp /tmp/glusterfs.txt ${var.boot_vm_ipv4_address}:/root",
+      #"scp /tmp/glusterfs.txt ${var.boot_vm_ipv4_address}:/root",
     ]
   }
 }
